@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { maskCharactersFromIndex } from '../libs/utils'
 import { getCredential } from '../services/credential'
 
-import { Alert, Button } from 'antd'
+import { Button, message } from 'antd'
 import { CopyOutlined, KeyOutlined } from '@ant-design/icons'
 
 const Credential = () => {
 
   const [credential, setCredential] = useState({ value: '' })
-  const [showCredentialToast, setShowCredentialToast] = useState(false)
+  const [messageApi, contextHolder] = message.useMessage()
 
   useEffect(() => {
     const fetchCredential = async () => {
@@ -21,13 +21,12 @@ const Credential = () => {
   const copyToClipboard = async () => {
     try {
       navigator.clipboard.writeText(credential.value)
-      setShowCredentialToast(true)
+      messageApi.open({
+        type: 'success',
+        content: 'Credential copied successfully'
+      })
     } catch (error) {
       console.error(error)
-    } finally {
-      setTimeout(() => {
-        setShowCredentialToast(false)
-      }, 3000);
     }
   }
 
@@ -58,7 +57,7 @@ const Credential = () => {
         </span>
       </div>
 
-      <Alert className={`credential-alert ${showCredentialToast ? 'show' : ''}`} message="Credential copied successfully" type="success" />
+      {contextHolder}
     </section>
   )
 }
