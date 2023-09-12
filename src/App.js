@@ -1,7 +1,8 @@
 import './App.css'
 
 import Credential from './components/Credential'
-import { Menu, Button } from 'antd'
+import Secrets from './components/Secrets'
+import { Menu } from 'antd'
 import { InfoCircleOutlined, KeyOutlined } from '@ant-design/icons'
 
 const items = [
@@ -33,8 +34,7 @@ function App() {
 
       <main>
         <Credential />
-          </div>
-        </section>
+        <Secrets />
       </main>
     </div>
   )
