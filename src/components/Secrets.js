@@ -42,9 +42,6 @@ const Secrets = () => {
       const response = await getSecrets()
 
       const curatedSecrets = response.map((credential) => {
-        const active =
-          new Date().getTime() <= new Date(credential.endDateTime).getTime()
-
         return {
           key: credential.secretId,
           name: credential.displayName,
@@ -53,8 +50,8 @@ const Secrets = () => {
           secret: credential.value,
           status: (
             <Alert
-              message={`${active ? 'Active' : 'Not Active'}`}
-              type={`${active ? 'success' : 'error'}`}
+              message={`${credential.isActive ? 'Active' : 'Not Active'}`}
+              type={`${credential.isActive ? 'success' : 'error'}`}
               style={{ textAlign: 'center' }}
             />
           ),
