@@ -46,9 +46,9 @@ const Credential = () => {
             shape='circle'
             icon={<KeyOutlined />}
           />
-          <span className='credential-value'>
+          <code className='credential-value'>
             {maskCharactersFromIndex(credential.value, 8)}
-          </span>
+          </code>
           <Button
             type='primary'
             shape='circle'
