@@ -12,41 +12,12 @@ import {
   Modal,
   Space,
   Switch,
-  Table,
 } from 'antd'
 import { CopyOutlined } from '@ant-design/icons'
 
+import SecretsTable from './SecretsTable'
+
 const { RangePicker } = DatePicker
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Created Date',
-    dataIndex: 'created',
-    key: 'created',
-  },
-  {
-    title: 'Valid Until',
-    dataIndex: 'valid',
-    key: 'valid',
-  },
-  {
-    title: 'Secret',
-    dataIndex: 'secret',
-    key: 'secret',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-  },
-]
-
-const linesPerPage = 5
 
 const Secrets = () => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -149,7 +120,10 @@ const Secrets = () => {
   }, [])
 
   return (
-    <section className='secrets' data-testid='secrets-component'>
+    <section
+      className='secrets'
+      data-testid='secrets-component'
+    >
       <div className='secrets-header'>
         <h3>Secrets list</h3>
         <Button
@@ -163,8 +137,6 @@ const Secrets = () => {
           title='Add secret'
           open={isModalOpen}
           okText='Add'
-          okButtonProps={{ loading: isAddingSecret }}
-          cancelButtonProps={{ loading: isAddingSecret }}
           footer={
             newSecret.length ? (
               <Button
@@ -175,9 +147,15 @@ const Secrets = () => {
               </Button>
             ) : (
               <>
-                <Button onClick={handleCancel}>Cancel</Button>
+                <Button
+                  loading={isAddingSecret}
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
                 <Button
                   type='primary'
+                  loading={isAddingSecret}
                   onClick={handleAdd}
                 >
                   Add
@@ -189,7 +167,10 @@ const Secrets = () => {
         >
           {newSecret.length ? (
             <>
-              <p>This is your newly generated secret. Keep in mind it'll only be shown this time, so copy it and store it somewhere safe.</p>
+              <p>
+                This is your newly generated secret. Keep in mind it'll only be
+                shown this time, so copy it and store it somewhere safe.
+              </p>
               <span className='credential'>
                 <code className='credential-value'>{newSecret}</code>
                 <Button
@@ -228,17 +209,7 @@ const Secrets = () => {
         </Modal>
       </div>
 
-      <div className='secrets-table'>
-        <Table
-          dataSource={secrets}
-          columns={columns}
-          pagination={{
-            pageSize: linesPerPage,
-            showTotal: (total, range) =>
-              `Lines ${range.toString().replace(',', '-')} of ${total}`,
-          }}
-        />
-      </div>
+      <SecretsTable secrets={secrets} />
 
       {contextHolder}
     </section>
