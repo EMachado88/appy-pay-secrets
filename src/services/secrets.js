@@ -1,3 +1,5 @@
+import randomstring from 'randomstring'
+
 import mockedSecrets from '../mocks/secrets.json'
 
 const secrets = mockedSecrets.data
@@ -7,6 +9,19 @@ export const getSecrets = async () => {
 }
 
 export const addSecret = async (credential) => {
-  secrets.push(credential)
-  return credential
+  const value = randomstring.generate({ length: 38, capitalization: 'lowercase' })
+  const secretId = randomstring.generate({ length: 38, capitalization: 'lowercase' })
+
+  secrets.push({
+    ...credential,
+    secretId,
+    value: `***${value.slice(-3)}`,
+  })
+
+  console.log(secrets)
+
+  return {
+    secretId,
+    value
+  }
 }

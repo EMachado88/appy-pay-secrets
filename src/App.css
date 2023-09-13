@@ -20,6 +20,7 @@ main {
   background-color: #fff;
   border-radius: 50px;
   display: flex;
+  align-items: center;
 }
 
 .credential .credential-value {

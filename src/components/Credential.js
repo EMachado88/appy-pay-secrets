@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { maskCharactersFromIndex } from '../libs/utils'
+import { copyToClipboard, maskCharactersFromIndex } from '../libs/utils'
 import { getCredential } from '../services/credential'
 
 import { Button, message } from 'antd'
@@ -17,18 +17,6 @@ const Credential = () => {
     }
     fetchCredential()
   }, [credential])
-
-  const copyToClipboard = async () => {
-    try {
-      navigator.clipboard.writeText(credential.value)
-      messageApi.open({
-        type: 'success',
-        content: 'Credential copied successfully'
-      })
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   return (
     <section className='credentials'>
@@ -52,7 +40,7 @@ const Credential = () => {
             type='primary'
             shape='circle'
             icon={<CopyOutlined />}
-            onClick={copyToClipboard}
+            onClick={() => copyToClipboard(credential.value, messageApi)}
           />
         </span>
       </div>
