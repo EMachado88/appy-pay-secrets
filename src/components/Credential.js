@@ -19,7 +19,7 @@ const Credential = () => {
   }, [credential])
 
   return (
-    <section className='credentials'>
+    <section className='credentials' data-testid='credential-component'>
       <h4>Credentials</h4>
       <p>
         Client ID and Secrets are used to authenticate your merchant in our

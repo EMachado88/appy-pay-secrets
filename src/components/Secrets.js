@@ -149,7 +149,7 @@ const Secrets = () => {
   }, [])
 
   return (
-    <section className='secrets'>
+    <section className='secrets' data-testid='secrets-component'>
       <div className='secrets-header'>
         <h3>Secrets list</h3>
         <Button
