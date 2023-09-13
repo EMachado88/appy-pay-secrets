@@ -18,8 +18,6 @@ export const addSecret = async (credential) => {
     value: `***${value.slice(-3)}`,
   })
 
-  console.log(secrets)
-
   return {
     secretId,
     value
