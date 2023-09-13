@@ -37,5 +37,11 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "overrides": {
+    "react-scripts": {
+      "typescript": "^5"
+    }
+  },
+  "homepage": "https://emachado88.github.io/appy-pay-secrets"
 }
