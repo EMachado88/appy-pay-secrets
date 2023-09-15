@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { copyToClipboard } from '../libs/utils'
 import { getSecrets, addSecret } from '../services/secrets'
@@ -31,27 +31,30 @@ const Secrets = () => {
   const [isActive, setIsActive] = useState(true)
   const [newSecret, setNewSecret] = useState('')
 
-  const fetchSecrets = async () => {
-    const response = await getSecrets()
+  const buildAlert = (secret) => {
+    let message
+    let type
 
-    const curatedSecrets = response.map((credential) => {
-      return {
-        key: credential.secretId,
-        name: credential.displayName,
-        created: dayjs(credential.startDateTime).format('DD/MM/YYYY HH:mm'),
-        valid: dayjs(credential.endDateTime).format('DD/MM/YYYY HH:mm'),
-        secret: credential.value,
-        status: (
-          <Alert
-            message={`${credential.isActive ? 'Active' : 'Not Active'}`}
-            type={`${credential.isActive ? 'success' : 'error'}`}
-            style={{ textAlign: 'center' }}
-          />
-        ),
+    if (secret.isActive) {
+      if (dayjs(Date()).add(30, 'days').isBefore(dayjs(secret.endDateTime))) {
+        message = 'Active'
+        type = 'success'
+      } else {
+        message = 'Expiring soon'
+        type = 'warning'
       }
-    })
+    } else {
+      message = 'Not Active'
+      type = 'error'
+    }
 
-    setSecrets(curatedSecrets)
+    return (
+      <Alert
+        message={message}
+        type={type}
+        style={{ textAlign: 'center' }}
+      />
+    )
   }
 
   const handleCancel = () => {
@@ -115,9 +118,26 @@ const Secrets = () => {
     setIsActive(checked)
   }
 
+  const fetchSecrets = useCallback(async () => {
+    const response = await getSecrets()
+
+    const curatedSecrets = response.map((secret) => {
+      return {
+        key: secret.secretId,
+        name: secret.displayName,
+        created: dayjs(secret.startDateTime).format('DD/MM/YYYY HH:mm'),
+        valid: dayjs(secret.endDateTime).format('DD/MM/YYYY HH:mm'),
+        secret: secret.value,
+        status: buildAlert(secret),
+      }
+    })
+
+    setSecrets(curatedSecrets)
+  }, [])
+
   useEffect(() => {
     fetchSecrets()
-  }, [])
+  }, [fetchSecrets])
 
   return (
     <section
