@@ -7,17 +7,16 @@ import {
   Alert,
   Button,
   DatePicker,
+  Form,
   Input,
   message,
   Modal,
   Space,
   Switch,
 } from 'antd'
-import { CopyOutlined } from '@ant-design/icons'
+import { CopyOutlined, KeyOutlined } from '@ant-design/icons'
 
 import SecretsTable from './SecretsTable'
-
-const { RangePicker } = DatePicker
 
 const Secrets = () => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -70,10 +69,10 @@ const Secrets = () => {
   }
 
   const handleAdd = async () => {
-    if (!displayName.length) {
+    if (!displayName.length || !endDateTime) {
       messageApi.open({
         type: 'error',
-        content: 'Display name is required',
+        content: 'All fields are required',
       })
       return
     }
@@ -105,12 +104,8 @@ const Secrets = () => {
     setDisplayName(event.target.value)
   }
 
-  const onDatesChange = (value) => {
-    const [selectedStartDateTime, selectedEndDateTime] = value ?? [
-      dayjs(Date()),
-      dayjs(Date()).add(1, 'weeks'),
-    ]
-    setStartDateTime(selectedStartDateTime)
+  const onDateChange = (value) => {
+    const selectedEndDateTime = value ?? dayjs(Date()).add(1, 'weeks')
     setEndDateTime(selectedEndDateTime)
   }
 
@@ -192,6 +187,10 @@ const Secrets = () => {
                 shown this time, so copy it and store it somewhere safe.
               </p>
               <span className='credential'>
+              <Button
+                shape='circle'
+                icon={<KeyOutlined />}
+              />
                 <code className='credential-value'>{newSecret}</code>
                 <Button
                   type='primary'
@@ -202,29 +201,52 @@ const Secrets = () => {
               </span>
             </>
           ) : (
-            <Space
-              direction='vertical'
-              size='middle'
+            <Form
+              name='new-secret'
+              labelCol={{
+                span: 4,
+              }}
+              wrapperCol={{
+                span: 16,
+              }}
             >
-              <Input
-                placeholder='Display name'
-                value={displayName}
-                onChange={onDisplayNameChange}
-              />
-              <RangePicker
-                showTime
-                value={[startDateTime, endDateTime]}
-                format='DD/MM/YYYY HH:mm'
-                onChange={onDatesChange}
-              />
-              <span>
-                Active:{' '}
-                <Switch
-                  defaultChecked
-                  onChange={onActiveChange}
-                />
-              </span>
-            </Space>
+              <Space
+                direction='vertical'
+                size='middle'
+              >
+                <Form.Item
+                  label='Name: '
+                  name='name'
+                >
+                  <Input
+                    placeholder='Display name'
+                    value={displayName}
+                    onChange={onDisplayNameChange}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label='Expiry date: '
+                  name='expiry-date'
+                  initialValue={endDateTime}
+                >
+                  <DatePicker
+                    showTime
+                    allowClear={false}
+                    format='DD/MM/YYYY HH:mm'
+                    onChange={onDateChange}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label='Active: '
+                  name='active'
+                >
+                  <Switch
+                    checked={isActive}
+                    onChange={onActiveChange}
+                  />
+                </Form.Item>
+              </Space>
+            </Form>
           )}
         </Modal>
       </div>
