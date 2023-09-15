@@ -16,7 +16,7 @@ const Credential = () => {
       setCredential(response)
     }
     fetchCredential()
-  }, [credential])
+  }, [])
 
   return (
     <section className='credentials' data-testid='credential-component'>
@@ -34,7 +34,7 @@ const Credential = () => {
             icon={<KeyOutlined />}
           />
           <code className='credential-value'>
-            {maskCharactersFromIndex(credential.value, 8)}
+            {maskCharactersFromIndex(credential.value || '', 8)}
           </code>
           <Button
             type='primary'

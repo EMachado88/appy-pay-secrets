@@ -1,7 +1,12 @@
-import mockedCredential from '../mocks/credential.json'
+import axios from 'axios'
 
-const credential = mockedCredential.data
+import { apiUrl } from './config'
 
 export const getCredential = async () => {
-  return credential
+  try {
+    const { data } = await axios.get(`${apiUrl}/99/credentials/1`)
+    return data.data
+  } catch (error) {
+    return error
+  }
 }

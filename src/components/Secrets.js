@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { copyToClipboard } from '../libs/utils'
 import { getSecrets, addSecret } from '../services/secrets'
@@ -85,10 +85,9 @@ const Secrets = () => {
         startDateTime: startDateTime.format('YYYY-MM-DD HH:mm:ss'),
         endDateTime: endDateTime.format('YYYY-MM-DD HH:mm:ss'),
         isActive,
-      })
+      }, secrets, setSecrets, buildAlert)
 
       setNewSecret(response.value)
-      await fetchSecrets()
     } catch (error) {
       messageApi.open({
         type: 'error',
@@ -113,26 +112,26 @@ const Secrets = () => {
     setIsActive(checked)
   }
 
-  const fetchSecrets = useCallback(async () => {
-    const response = await getSecrets()
-
-    const curatedSecrets = response.map((secret) => {
-      return {
-        key: secret.secretId,
-        name: secret.displayName,
-        created: dayjs(secret.startDateTime).format('DD/MM/YYYY HH:mm'),
-        valid: dayjs(secret.endDateTime).format('DD/MM/YYYY HH:mm'),
-        secret: secret.value,
-        status: buildAlert(secret),
-      }
-    })
-
-    setSecrets(curatedSecrets)
-  }, [])
-
   useEffect(() => {
+    const fetchSecrets = async () => {
+      const response = await getSecrets()
+
+      const curatedSecrets = response.map((secret) => {
+        return {
+          key: secret.secretId,
+          name: secret.displayName,
+          created: dayjs(secret.startDateTime).format('DD/MM/YYYY HH:mm'),
+          valid: dayjs(secret.endDateTime).format('DD/MM/YYYY HH:mm'),
+          secret: secret.value,
+          status: buildAlert(secret),
+        }
+      })
+
+      setSecrets(curatedSecrets)
+    }
+
     fetchSecrets()
-  }, [fetchSecrets])
+  }, [])
 
   return (
     <section

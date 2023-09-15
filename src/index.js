@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+
+import { apiKey } from './services/config';
+
+axios.defaults.headers.common['x-api-key'] = apiKey
+axios.defaults.headers.common['candidate-name'] = 'Emanuel Machado'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

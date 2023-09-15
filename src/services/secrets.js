@@ -1,25 +1,44 @@
-import randomstring from 'randomstring'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
-import mockedSecrets from '../mocks/secrets.json'
-
-const secrets = mockedSecrets.data
+import { apiUrl } from './config'
 
 export const getSecrets = async () => {
-  return secrets
+  try {
+    const { data } = await axios.get(`${apiUrl}/99/secrets`)
+    return data.data
+  } catch (error) {
+    return error
+  }
 }
 
-export const addSecret = async (credential) => {
-  const value = randomstring.generate({ length: 38, capitalization: 'lowercase' })
-  const secretId = randomstring.generate({ length: 38, capitalization: 'lowercase' })
+export const addSecret = async (secret, secrets, setSecrets, buildAlert) => {
+  const { displayName, startDateTime, endDateTime, isActive } = secret
 
-  secrets.push({
-    ...credential,
-    secretId,
-    value: `***${value.slice(-3)}`,
-  })
+  try {
+    const { data } = await axios.post(`${apiUrl}/99/secrets`, {
+      displayName,
+      startDateTime,
+      endDateTime,
+      isActive,
+    })
 
-  return {
-    secretId,
-    value
+    const { secretId, value } = data
+
+    setSecrets([
+      ...secrets,
+      {
+        key: secretId,
+        name: secret.displayName,
+        created: dayjs(secret.startDateTime).format('DD/MM/YYYY HH:mm'),
+        valid: dayjs(secret.endDateTime).format('DD/MM/YYYY HH:mm'),
+        secret: `***${value.slice(-3)}`,
+        status: buildAlert(secret)
+      },
+    ])
+
+    return { secretId, value }
+  } catch (error) {
+    return error
   }
 }
