@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/appy-pay-secrets/static/css/main.d47c54f0.css",
+    "main.js": "/appy-pay-secrets/static/js/main.26930d1c.js",
+    "static/js/787.ec8debcf.chunk.js": "/appy-pay-secrets/static/js/787.ec8debcf.chunk.js",
+    "index.html": "/appy-pay-secrets/index.html",
+    "main.d47c54f0.css.map": "/appy-pay-secrets/static/css/main.d47c54f0.css.map",
+    "main.26930d1c.js.map": "/appy-pay-secrets/static/js/main.26930d1c.js.map",
+    "787.ec8debcf.chunk.js.map": "/appy-pay-secrets/static/js/787.ec8debcf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d47c54f0.css",
+    "static/js/main.26930d1c.js"
+  ]
+}
